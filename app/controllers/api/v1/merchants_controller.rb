@@ -5,4 +5,6 @@ class Api::V1::MerchantsController < ApplicationController
 
   def show
   end
+
+  
 end
