@@ -3,6 +3,6 @@ FactoryBot.define do
     name { "MyString" }
     description { "MyString" }
     unit_price { 1 }
-    merchants { nil }
+    merchant
   end
 end

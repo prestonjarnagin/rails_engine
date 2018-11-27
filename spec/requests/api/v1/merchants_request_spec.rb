@@ -13,9 +13,11 @@ RSpec.describe 'Merchants API' do
 
   describe 'Merchant Business Intelligence' do
 
-    it 'returns top (x) merchants ranked by revenue' do
+    xit 'returns top (x) merchants ranked by revenue' do
+      create(:merchant)
       get '/api/v1/merchants/most_revenue?quantity=2'
-      create_list(:merchant, 3)
+      binding.pry
+
 
       items = JSON.parse(response.body)
       expect(items.count).to eq(2)
