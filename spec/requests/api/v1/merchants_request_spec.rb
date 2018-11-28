@@ -7,8 +7,21 @@ RSpec.describe 'Merchants API' do
     get '/api/v1/merchants'
 
     expect(response).to be_successful
-    items = JSON.parse(response.body)
-    expect(items.count).to eq(3)
+    merchants = JSON.parse(response.body)
+    expect(merchants.count).to eq(3)
+  end
+
+  it 'sends a single merchant' do
+    new_merchant = create(:merchant)
+
+    get "/api/v1/merchants/#{new_merchant.id}"
+
+    expect(response).to be_successful
+    merchant = JSON.parse(response.body)
+
+    expected = new_merchant.name
+    actual = merchant["name"]
+    expect(actual).to eq(expected)
   end
 
   describe 'Merchant Business Intelligence' do
