@@ -117,12 +117,6 @@ RSpec.describe 'Merchants API' do
 
   describe 'Multi Finders' do
 
-    it 'returns by id' do
-      merchant_1, merchant_2 = create_list(:merchant, 2)
-    end
-
-
-
   end
 
   describe 'Merchant Business Intelligence' do
