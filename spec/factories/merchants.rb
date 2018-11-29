@@ -1,5 +1,5 @@
 FactoryBot.define do
   factory :merchant do
-    name { Faker::Bank.name }
+    sequence(:name)       { |n| "Merchant #{n}" }
   end
 end

@@ -2,23 +2,38 @@ require 'rails_helper'
 
 RSpec.describe Merchant, type: :model do
 
-  xit '.rank_by_revenue(limit)' do
-    transaction_1, transaction_2, transaction_3 = create_list(:transaction, 3)
-    invoice_item_1 = create(:invoice_item, unit_price: 5, quantity: 1)
-    invoice_item_2 = create(:invoice_item, unit_price: 9, quantity: 1)
-    invoice_item_3 = create(:invoice_item, unit_price: 2, quantity: 1)
-    transaction_1.invoice.invoice_items = [invoice_item_1]
-    transaction_2.invoice.invoice_items = [invoice_item_2]
-    transaction_3.invoice.invoice_items = [invoice_item_3]
+  it '.rank_by_revenue(limit)' do
+    ii_1 = create(:invoice_item, unit_price: 5)
+    ii_1.item.merchant = ii_1.invoice.merchant
+    ii_1.invoice.transactions.create(attributes_for(:transaction))
 
+    ii_2 = create(:invoice_item, unit_price: 9)
+    ii_2.item.merchant = ii_2.invoice.merchant
+    ii_2.invoice.transactions.create(attributes_for(:transaction))
 
-    expected = [invoice_item_2.item.merchant]
-    actual = Merchant.ranked_by_revenue(1)
-    expect(actual).to eq(expected)
+    ii_2 = create(:invoice_item, unit_price: 1)
+    ii_2.item.merchant = ii_2.invoice.merchant
+    ii_2.invoice.transactions.create(attributes_for(:transaction))
 
-    expected = [invoice_item_2.item.merchant, invoice_item_3.item,merchant]
-    actual = Merchant.ranked_by_revenue(2)
-    expect(actual).to eq(expected)
+    ii_3 = create(:invoice_item, unit_price: 4, quantity: 10)
+    ii_3.item.merchant = ii_3.invoice.merchant
+    ii_3.invoice.transactions.create(attributes_for(:transaction))
+
+    ii_4 = create(:invoice_item, unit_price: 5, quantity: 2)
+    ii_4.item.merchant = ii_4.invoice.merchant
+    ii_4.invoice.transactions.create(attributes_for(:transaction))
+
+    expected_first = ii_3.item.merchant
+    expected_second = ii_4.item.merchant
+    expected_last = ii_1.item.merchant
+
+    actual_first = Merchant.ranked_by_revenue(4).first
+    actual_second = Merchant.ranked_by_revenue(4).second
+    actual_last = Merchant.ranked_by_revenue(4).last
+
+    expect(actual_first).to eq(expected_first)
+    expect(actual_second).to eq(expected_second)
+    expect(actual_last).to eq(expected_last)
   end
 
 end
