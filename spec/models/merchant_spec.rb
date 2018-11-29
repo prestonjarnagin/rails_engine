@@ -75,19 +75,38 @@ RSpec.describe Merchant, type: :model do
       expect(actual).to eq(expected)
     end
 
-    it 'revenue_by_merchant(merchant_id)' do
+    it '.revenue_by_merchant(merchant_id)' do
       expected = 14
       actual = Merchant.revenue_by_merchant(@merchant_1.id)
       expect(actual).to eq(expected)
     end
 
-    it 'revenue_by_merchant_on_date(merchant_id, date)' do
+    it '.revenue_by_merchant_on_date(merchant_id, date)' do
       expected = 14
       actual = Merchant.revenue_by_merchant_on_date(@merchant_1.id, "2012-01-01")
       expect(actual).to eq(expected)
 
       expected = 0
       actual = Merchant.revenue_by_merchant_on_date(@merchant_1.id, "2012-02-01")
+      expect(actual).to eq(expected)
+    end
+
+    it '.favorite_customer' do
+      customer_1 = create(:customer)
+      customer_2 = create(:customer)
+
+      @ii_1.invoice.customer = customer_1
+      @ii_2.invoice.customer = customer_1
+
+      expected = customer_1.id
+      actual = Merchant.favorite_customer(@merchant_1.id)
+      expect(actual).to eq(expected)
+
+      @ii_1.invoice.customer = customer_2
+      @ii_2.invoice.customer = customer_2
+
+      expected = customer_2.id
+      actual = Merchant.favorite_customer(@merchant_1.id)
       expect(actual).to eq(expected)
     end
   end
