@@ -91,7 +91,7 @@ RSpec.describe Merchant, type: :model do
       expect(actual).to eq(expected)
     end
 
-    it '.favorite_customer' do
+    it '.favorite_customer(merchant_id)' do
       customer_1 = create(:customer)
       customer_2 = create(:customer)
 
