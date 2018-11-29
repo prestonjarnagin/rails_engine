@@ -80,5 +80,15 @@ RSpec.describe Merchant, type: :model do
       actual = Merchant.revenue_by_merchant(@merchant_1.id)
       expect(actual).to eq(expected)
     end
+
+    it 'revenue_by_merchant_on_date(merchant_id, date)' do
+      expected = 14
+      actual = Merchant.revenue_by_merchant_on_date(@merchant_1.id, "2012-01-01")
+      expect(actual).to eq(expected)
+
+      expected = 0
+      actual = Merchant.revenue_by_merchant_on_date(@merchant_1.id, "2012-02-01")
+      expect(actual).to eq(expected)
+    end
   end
 end

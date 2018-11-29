@@ -40,4 +40,18 @@ class Merchant < ApplicationRecord
       .first
   end
 
+  def self.revenue_by_merchant_on_date(merchant_id, date)
+    result = Merchant.joins(invoices: [:invoice_items, :transactions])
+      .merge(Transaction.unscoped.successful)
+      .where("cast(invoices.created_at AS text) LIKE ?","#{date}%")
+      .where(id: merchant_id)
+      .select('SUM(invoice_items.quantity*invoice_items.unit_price) AS revenue')
+      .group(:id)
+      .pluck('SUM(invoice_items.quantity*invoice_items.unit_price) AS revenue')
+      .first
+
+      return 0 if result.nil?
+      result
+  end
+
 end
