@@ -3,13 +3,17 @@ require 'rails_helper'
 RSpec.describe Merchant, type: :model do
   describe 'class methods' do
     before(:each) do
+      @merchant_1 = create(:merchant)
+
       @ii_1 = create(:invoice_item, unit_price: 5, quantity: 1)
-      @ii_1.item.merchant = @ii_1.invoice.merchant
+      @ii_1.invoice.merchant = @merchant_1
+      @ii_1.item.merchant = @merchant_1
       @ii_1.invoice.update(created_at: "2012-01-01 14:40:00 UTC")
       @ii_1.invoice.transactions.create(attributes_for(:transaction))
 
       @ii_2 = create(:invoice_item, unit_price: 9, quantity: 1)
-      @ii_2.item.merchant = @ii_2.invoice.merchant
+      @ii_2.invoice.merchant = @merchant_1
+      @ii_2.item.merchant = @merchant_1
       @ii_2.invoice.update(created_at: "2012-01-01 14:50:00 UTC")
       @ii_2.invoice.transactions.create(attributes_for(:transaction))
 
@@ -23,7 +27,7 @@ RSpec.describe Merchant, type: :model do
       @ii_4.invoice.update(created_at: "2012-01-02 14:54:09 UTC")
       @ii_4.invoice.transactions.create(attributes_for(:transaction))
 
-      @ii_5 = create(:invoice_item, unit_price: 5, quantity: 2)
+      @ii_5 = create(:invoice_item, unit_price: 5, quantity: 3)
       @ii_5.item.merchant = @ii_5.invoice.merchant
       @ii_5.invoice.update(created_at: "2012-01-03 14:54:09 UTC")
       @ii_5.invoice.transactions.create(attributes_for(:transaction))
@@ -32,7 +36,7 @@ RSpec.describe Merchant, type: :model do
     it '.rank_by_revenue(limit)' do
       expected_first = @ii_4.item.merchant
       expected_second = @ii_5.item.merchant
-      expected_last = @ii_1.item.merchant
+      expected_last = @ii_3.item.merchant
 
       actual_first = Merchant.ranked_by_revenue(4).first
       actual_second = Merchant.ranked_by_revenue(4).second
@@ -66,8 +70,14 @@ RSpec.describe Merchant, type: :model do
       actual = Merchant.revenue_on_date("2012-01-02")
       expect(actual).to eq(expected)
 
-      expected = 10
+      expected = 15
       actual = Merchant.revenue_on_date("2012-01-03")
+      expect(actual).to eq(expected)
+    end
+
+    it 'revenue_by_merchant(merchant_id)' do
+      expected = 14
+      actual = Merchant.revenue_by_merchant(@merchant_1.id)
       expect(actual).to eq(expected)
     end
   end
