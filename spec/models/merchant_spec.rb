@@ -39,14 +39,14 @@ RSpec.describe Merchant, type: :model do
       expect(actual_last).to eq(expected_last)
     end
 
-    it '.rank_by_items_sold(limit)' do
+    it '.rank_by_items_sold_count(limit)' do
       expected_first = @ii_3.item.merchant
       expected_second = @ii_2.item.merchant
       expected_last = @ii_4.item.merchant
 
-      actual_first = Merchant.ranked_by_items_sold(3).first
-      actual_second = Merchant.ranked_by_items_sold(3).second
-      actual_last = Merchant.ranked_by_items_sold(3).last
+      actual_first = Merchant.ranked_by_items_sold_count(3).first
+      actual_second = Merchant.ranked_by_items_sold_count(3).second
+      actual_last = Merchant.ranked_by_items_sold_count(3).last
 
       expect(actual_first).to eq(expected_first)
       expect(actual_second).to eq(expected_second)
