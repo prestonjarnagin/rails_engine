@@ -57,7 +57,7 @@ RSpec.describe Merchant, type: :model do
       expect(expected_last).to eq(actual_last)
     end
 
-    xit '.revenue_on_date(date)' do
+    it '.revenue_on_date(date)' do
       expected = 14
       actual = Merchant.revenue_on_date("2012-01-01")
       expect(actual).to eq(expected)
@@ -70,6 +70,5 @@ RSpec.describe Merchant, type: :model do
       actual = Merchant.revenue_on_date("2012-01-03")
       expect(actual).to eq(expected)
     end
-
   end
 end
