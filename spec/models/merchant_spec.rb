@@ -56,9 +56,9 @@ RSpec.describe Merchant, type: :model do
       actual_second = Merchant.ranked_by_items_sold_count(3).second
       actual_last = Merchant.ranked_by_items_sold_count(3).last
 
-      expect(expected_first).to eq(actual_first)
-      expect(expected_second).to eq(actual_second)
-      expect(expected_last).to eq(actual_last)
+      expect(actual_first).to eq(expected_first)
+      expect(actual_second).to eq(expected_second)
+      expect(actual_last).to eq(expected_last)
     end
 
     it '.revenue_on_date(date)' do
@@ -101,7 +101,6 @@ RSpec.describe Merchant, type: :model do
       expected = customer_1.id
       actual = Merchant.favorite_customer(@merchant_1.id)
 
-      binding.pry
       expect(actual).to eq(expected)
 
       @ii_1.invoice.customer = customer_2
