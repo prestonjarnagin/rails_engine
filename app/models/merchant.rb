@@ -2,6 +2,8 @@ class Merchant < ApplicationRecord
 
   has_many :invoices
 
+  has_many :customers, through: :invoices
+
   def self.ranked_by_revenue(limit_to)
     select("merchants.*, SUM(invoice_items.quantity*invoice_items.unit_price) as revenue")
       .joins(invoices: [:invoice_items, :transactions])
@@ -55,14 +57,12 @@ class Merchant < ApplicationRecord
   end
 
   def self.favorite_customer(merchant_id)
-    result = Customer.joins(invoices: [:invoice_items, :transactions])
+    Customer.joins(invoices: [:invoice_items, :transactions])
       .merge(Transaction.unscoped.successful)
       .where('invoices.merchant_id = ?', merchant_id)
       .select('customers.id, COUNT(customers.id) AS order_count')
       .group(:id).order('order_count DESC')
       .first
-    return result if result.nil?
-    result.id
   end
 
 end
