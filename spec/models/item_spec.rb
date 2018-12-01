@@ -44,6 +44,23 @@ RSpec.describe Item, type: :model do
       expect(actual.second).to eq(expected_second)
       expect(actual.third).to eq(expected_third)
     end
+
+    it '.best_day(item_id)' do
+      @ii_1.invoice.update(created_at: "2012-03-25 09:54:09 UTC")
+
+      expected = "2012-03-25"
+      actual = Item.best_day(@ii_1.item)
+
+      ii_2 = create(:invoice_item, item: @ii_1.item)
+      ii_2.invoice.transactions.create(attributes_for(:transaction))
+      ii_2.invoice.update(created_at: "2012-05-01 09:54:09 UTC")
+      ii_3 = create(:invoice_item, item: @ii_1.item)
+      ii_3.invoice.transactions.create(attributes_for(:transaction))
+      ii_3.invoice.update(created_at: "2012-05-01 09:54:09 UTC")
+
+      expected = "2012-05-01"
+      actual = Item.best_day(@ii_1.item)
+    end
   end
 
 end
