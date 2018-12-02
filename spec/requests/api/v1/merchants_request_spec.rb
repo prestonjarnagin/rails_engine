@@ -260,7 +260,7 @@ RSpec.describe 'Merchants API' do
 
       data = JSON.parse(response.body)
 
-      expect(data['data']['attributes']).to eq({'revenue' => "100.00"})
+      expect(data['data']['attributes']).to eq({'total_revenue' => "100.00"})
     end
   end
 
