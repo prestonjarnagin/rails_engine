@@ -2,8 +2,8 @@ class Revenue
   attr_reader :revenue,
               :id
 
-  def initialize(revenue)
+  def initialize(revenue, id = 1)
     @revenue = revenue
-    @id = 1
+    @id = id
   end
 end
