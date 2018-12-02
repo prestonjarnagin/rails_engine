@@ -189,6 +189,37 @@ RSpec.describe 'Merchants API' do
     end
   end
 
+  describe 'Relationship Endpoints' do
+    it 'returns associated items' do
+      expected = create(:item)
+      merchant = create(:merchant)
+      allow(Item).to receive(:where).with(merchant_id: "#{merchant.id}").and_return(Item.all)
+
+      get "/api/v1/merchants/#{merchant.id}/items"
+      expect(response).to be_successful
+
+      items = JSON.parse(response.body)['data']
+
+      expect(items[0]['type']).to eq('item')
+      expect(items[0]['attributes']['name']).to eq(expected.name)
+    end
+
+    it 'returns associated invoices' do
+      expected = create(:invoice)
+      merchant = create(:merchant)
+      allow(Invoice).to receive(:where).with(merchant_id: "#{merchant.id}").and_return(Invoice.all)
+
+      get "/api/v1/merchants/#{merchant.id}/invoices"
+      expect(response).to be_successful
+
+      items = JSON.parse(response.body)['data']
+
+      expect(items[0]['type']).to eq('invoice')
+      expect(items[0]['id']).to eq("#{expected.id}")
+      expect(items[0]['attributes']['status']).to eq(expected.status)
+    end
+  end
+
   describe 'Merchant Business Intelligence' do
 
     it 'returns top (x) merchants ranked by revenue' do
@@ -219,7 +250,7 @@ RSpec.describe 'Merchants API' do
       expect(actual).to eq(expected)
     end
 
-    xit 'returns total revenue across all merchants for date (x)' do
+    it 'returns total revenue across all merchants for date (x)' do
       date = '2012-01-01'
       total_rev = 10000
       allow(Merchant).to receive(:revenue_on_date).with(date).and_return(total_rev)
@@ -229,8 +260,7 @@ RSpec.describe 'Merchants API' do
 
       data = JSON.parse(response.body)
 
-      # actual = data['data']['attributes']['name']
-      expect(actual).to eq(100.00)
+      expect(data['data']['attributes']).to eq({'revenue' => "100.00"})
     end
   end
 
