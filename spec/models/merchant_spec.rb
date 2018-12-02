@@ -91,24 +91,23 @@ RSpec.describe Merchant, type: :model do
       expect(actual).to eq(expected)
     end
 
-    xit '.favorite_customer(merchant_id)' do
+    it '.favorite_customer(merchant_id)' do
       customer_1 = create(:customer)
       customer_2 = create(:customer)
 
-      @ii_1.invoice.customer = customer_1
-      @ii_2.invoice.customer = customer_1
+      @ii_1.invoice.update(customer_id: customer_1.id)
+      @ii_2.invoice.update(customer_id: customer_1.id)
 
       expected = customer_1.id
-      actual = Merchant.favorite_customer(@merchant_1.id)
+      actual = Merchant.favorite_customer(@merchant_1.id).id
 
-      binding.pry
       expect(actual).to eq(expected)
 
-      @ii_1.invoice.customer = customer_2
-      @ii_2.invoice.customer = customer_2
+      @ii_1.invoice.update(customer_id: customer_2.id)
+      @ii_2.invoice.update(customer_id: customer_2.id)
 
       expected = customer_2.id
-      actual = Merchant.favorite_customer(@merchant_1.id)
+      actual = Merchant.favorite_customer(@merchant_1.id).id
       expect(actual).to eq(expected)
     end
   end
