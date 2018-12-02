@@ -1,5 +1,4 @@
 class ItemSerializer
-  include ActionView::Helpers::NumberHelper
   include FastJsonapi::ObjectSerializer
   attributes :name, :description
   attribute :unit_price do |object|
