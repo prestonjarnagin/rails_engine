@@ -262,6 +262,20 @@ RSpec.describe 'Merchants API' do
 
       expect(data['data']['attributes']).to eq({'total_revenue' => "100.00"})
     end
+
+
+    it 'returns the favorite customer for a merchant' do
+      expected = create(:customer)
+      allow(Merchant).to receive(:favorite_customer).with(1).and_return(expected)
+
+      get "/api/v1/merchants/1/favorite_customer"
+      expect(response).to be_successful
+
+      customer = JSON.parse(response.body)['data']
+
+      expect(customer['id']).to eq(expected.id.to_s)
+      expect(customer['attributes']['first_name']).to eq(expected.first_name)
+    end
   end
 
 end
