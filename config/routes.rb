@@ -2,14 +2,6 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v1 do
-      namespace :merchants do
-        get 'favorite_customer/show'
-      end
-    end
-  end
-
-  namespace :api do
-    namespace :v1 do
 
       namespace :merchants do
         get '/random', to: 'search#show', random: true
@@ -26,7 +18,15 @@ Rails.application.routes.draw do
         resources :items, only: [:index]
         resources :invoices, only: [:index]
       end
+
+      namespace :items do
+        get '/random', to: 'search#show', random: true
+        get '/find', to: 'search#show'
+        get '/find_all', to: 'search#index'
+      end
+
+      resources :items, only: [:index, :show]
+
     end
   end
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

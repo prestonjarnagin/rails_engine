@@ -220,7 +220,7 @@ RSpec.describe 'Merchants API' do
     end
   end
 
-  describe 'Merchant Business Intelligence' do
+  describe 'Business Intelligence' do
 
     it 'returns top (x) merchants ranked by revenue' do
       setup = create_list(:merchant, 2)
