@@ -1,5 +1,9 @@
 class Api::V1::Items::SearchController < ApplicationController
 
+  def index
+    render json: ItemSerializer.new(Item.where(item_params))
+  end
+
   def show
     if params[:random]
       render json: ItemSerializer.new(Item.order('RANDOM()').first)
